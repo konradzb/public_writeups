@@ -20,7 +20,7 @@ We checked for XSS by trying to send a request to the webhook and it worked!
 
 The flag is hidden in the file `flag.txt` so there is no way by using only XSS to end the challnege. Source code was given, so let's see what other functions we have.
 
-The admin's behaviour is described in `bot.py` file, its his purpose is only review our bug report. More intrestnig part is in `routes.py`, there are 2 functions where admin's privileges are needed - `review_report()` and `firmware_update()`. The second one caught your attention, the functionality is described in detail in `util.py`.
+The admin's behaviour is described in `bot.py` file, its purpose is only to review our bug report. More intrestnig part is in `routes.py`, there are 2 methods where admin's privileges are needed - `review_report()` and `firmware_update()`. The second one caught our attention, the functionality is described in detail in `util.py`.
 
 ```python
 def extract_firmware(file):
@@ -54,9 +54,9 @@ It seems an administrator can upload a tar file to be unpacked to the server, wh
 
 ## Zip Slip
 
-So the idea is that XSS does the tar file upload and perform the [Zip Slip attack](https://snyk.io/research/zip-slip-vulnerability). I have checked after some code modifiaction if Zip Slip works locally (commented the `@is_admin()` lines) and I was able to replace original files.
+So the idea is that XSS does the tar file upload and performs the [Zip Slip attack](https://snyk.io/research/zip-slip-vulnerability). I have checked after some code modifiaction if Zip Slip works locally (commented the `@is_admin()` lines) and I was able to replace original files.
 
-Best files to replace in our opinion are the templates, so we have picked `register.html`, and after of tar file upload, `/register` page is going to read the flag.
+Best files to replace in our opinion are the templates, because in case of templates, the application doesn't need to be restarted to load new files. So we have picked `register.html`, and after the tar file upload, `/register` page is going to read the flag using template engine.
 
 ```python
 import tarfile    
